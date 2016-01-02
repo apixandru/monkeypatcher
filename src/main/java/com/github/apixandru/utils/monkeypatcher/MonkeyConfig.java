@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 import static javax.xml.xpath.XPathConstants.NODESET;
-import static javax.xml.xpath.XPathConstants.STRING;
 
 /**
  * @author Alexandru-Constantin Bledea
@@ -41,10 +40,26 @@ final class MonkeyConfig {
 
     static class ClassToPatch {
         final String name;
+        final Map<String, MethodToPatch> methods;
+        final List<String> stubs;
 
-        ClassToPatch(final String name) {
+        ClassToPatch(final String name, final Map<String, MethodToPatch> methods, final List<String> stubs) {
             this.name = name;
+            this.methods = Collections.unmodifiableMap(methods);
+            this.stubs = Collections.unmodifiableList(stubs);
         }
+
+    }
+
+    static class MethodToPatch {
+        final String longName;
+        final String body;
+
+        MethodToPatch(final String longName, final String body) {
+            this.longName = longName;
+            this.body = body;
+        }
+
     }
 
     /**
@@ -60,27 +75,51 @@ final class MonkeyConfig {
             final Document doc = builder.parse(new File(filename));
 
             final XPath xpath = XPathFactory.newInstance().newXPath();
-            final String loggingPattern = (String) xpath.evaluate(LOGGING_PATTERN, doc, STRING);
+            final String loggingPattern = xpath.evaluate(LOGGING_PATTERN, doc);
 
             final NodeList classes = (NodeList) xpath.evaluate(CLASSES_PATTERN, doc, NODESET);
-            return new MonkeyConfig(loggingPattern, parseClasses(classes));
+            return new MonkeyConfig(loggingPattern, parseClasses(classes, xpath));
         } catch (ParserConfigurationException | IOException | SAXException | XPathExpressionException e) {
             throw new IllegalStateException("Bad agent configuration", e);
         }
     }
 
-    private static Map<String, ClassToPatch> parseClasses(final NodeList classes) {
+    private static Map<String, ClassToPatch> parseClasses(final NodeList classes, final XPath xpath) throws XPathExpressionException {
         Map<String, ClassToPatch> map = new HashMap<>();
         for (int i = 0; i < classes.getLength(); i++) {
-            final ClassToPatch parse = parse(classes.item(i));
+            final ClassToPatch parse = parse(classes.item(i), xpath);
             map.put(parse.name.replace('.', '/'), parse);
         }
         return map;
     }
 
-    private static ClassToPatch parse(final Node item) {
-        System.out.println(item);
-        return new ClassToPatch(item.getAttributes().getNamedItem("name").getTextContent());
+    private static ClassToPatch parse(final Node item, final XPath xpath) throws XPathExpressionException {
+        String name = item.getAttributes().getNamedItem("name").getTextContent();
+        return new ClassToPatch(name,
+                parseMethods((NodeList) xpath.evaluate("methods/method", item, NODESET), xpath),
+                parseStubs((NodeList) xpath.evaluate("class-pool/stub", item, NODESET), xpath));
+    }
+
+    private static List<String> parseStubs(final NodeList stubs, final XPath xpath) {
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < stubs.getLength(); i++) {
+            list.add(stubs.item(i).getTextContent());
+        }
+        return list;
+    }
+
+    private static Map<String, MethodToPatch> parseMethods(final NodeList methods, final XPath xpath) throws XPathExpressionException {
+        Map<String, MethodToPatch> map = new HashMap<>();
+        for (int i = 0; i < methods.getLength(); i++) {
+            final MethodToPatch parse = parseMethod(methods.item(i), xpath);
+            map.put(parse.longName, parse);
+        }
+        return map;
+    }
+
+    private static MethodToPatch parseMethod(final Node item, final XPath xpath) throws XPathExpressionException {
+        String name = item.getAttributes().getNamedItem("longname").getTextContent();
+        return new MethodToPatch(name, xpath.evaluate("body", item));
     }
 
 }
