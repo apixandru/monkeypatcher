@@ -28,7 +28,7 @@ public final class XmlUtil {
      * @param nodeList
      * @return
      */
-    public static Stream<Node> streamNodes(NodeList nodeList) {
+    private static Stream<Node> streamNodes(NodeList nodeList) {
         final List<Node> nodes = new ArrayList<>();
         for (int i = 0, to = nodeList.getLength(); i < to; i++) {
             nodes.add(nodeList.item(i));
