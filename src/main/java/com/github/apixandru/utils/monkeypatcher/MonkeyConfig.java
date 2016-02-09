@@ -1,5 +1,7 @@
 package com.github.apixandru.utils.monkeypatcher;
 
+import com.github.apixandru.utils.monkeypatcher.reimpl.ClassToPatch;
+import com.github.apixandru.utils.monkeypatcher.reimpl.MethodToPatch;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -36,30 +38,6 @@ final class MonkeyConfig {
     MonkeyConfig(final String loggingPattern, final Map<String, ClassToPatch> classes) {
         this.loggingPattern = loggingPattern;
         this.classes = Collections.unmodifiableMap(classes);
-    }
-
-    static class ClassToPatch {
-        final String name;
-        final Map<String, MethodToPatch> methods;
-        final List<String> stubs;
-
-        ClassToPatch(final String name, final Map<String, MethodToPatch> methods, final List<String> stubs) {
-            this.name = name;
-            this.methods = Collections.unmodifiableMap(methods);
-            this.stubs = Collections.unmodifiableList(stubs);
-        }
-
-    }
-
-    static class MethodToPatch {
-        final String longName;
-        final String body;
-
-        MethodToPatch(final String longName, final String body) {
-            this.longName = longName;
-            this.body = body;
-        }
-
     }
 
     /**

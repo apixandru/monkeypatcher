@@ -1,7 +1,7 @@
 package com.github.apixandru.utils.monkeypatcher;
 
-import com.github.apixandru.utils.monkeypatcher.MonkeyConfig.ClassToPatch;
-import com.github.apixandru.utils.monkeypatcher.MonkeyConfig.MethodToPatch;
+import com.github.apixandru.utils.monkeypatcher.reimpl.ClassToPatch;
+import com.github.apixandru.utils.monkeypatcher.reimpl.MethodToPatch;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtBehavior;

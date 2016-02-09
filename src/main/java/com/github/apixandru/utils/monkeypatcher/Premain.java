@@ -14,7 +14,6 @@ public final class Premain {
             System.exit(1);
         }
         final MonkeyConfig parse = MonkeyConfig.parse(agentArgument);
-        System.setProperty("java.util.logging.SimpleFormatter.format", parse.loggingPattern);
         instrumentation.addTransformer(new SimpleMethodBodyReplacer(parse));
     }
 

@@ -1,6 +1,8 @@
 package com.github.apixandru.utils.monkeypatcher;
 
-import org.w3c.dom.Node;
+import org.w3c.dom.Element;
+
+import javax.xml.xpath.XPathExpressionException;
 
 /**
  * @author Alexandru-Constantin Bledea
@@ -9,9 +11,9 @@ import org.w3c.dom.Node;
 public interface ConfigParser<T> {
 
     /**
-     * @param node
-     * @return
+     * @param element the config element
+     * @return the config object
      */
-    T parse(Node node);
+    T parse(Element element) throws XPathExpressionException;
 
 }
