@@ -21,7 +21,7 @@ import static javax.xml.xpath.XPathConstants.NODESET;
  */
 public class SimpleMethodBodyReplacerConfigParser implements ConfigParser<MonkeyConfig> {
 
-    private static final String XPATH_CLASSES = "/agent-config/transformer/classes/class";
+    private static final String XPATH_CLASSES = "classes/class";
 
     @Override
     public MonkeyConfig parse(final Element element) throws XPathExpressionException {
