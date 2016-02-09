@@ -1,12 +1,19 @@
 package com.github.apixandru.utils;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -43,6 +50,14 @@ public final class XmlUtil {
         } catch (XPathExpressionException e) {
             throw new IllegalArgumentException("XPath failure", e);
         }
+    }
+
+    public static Document loadDocument(final String filename) throws ParserConfigurationException, SAXException, IOException {
+        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setIgnoringElementContentWhitespace(true);
+
+        final DocumentBuilder builder = factory.newDocumentBuilder();
+        return builder.parse(new File(filename));
     }
 
 }

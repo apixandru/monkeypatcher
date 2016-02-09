@@ -7,11 +7,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
-import java.io.File;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 import java.util.Map;
@@ -33,7 +30,7 @@ public final class Premain {
             System.exit(1);
         }
 
-        final Document document = loadDocument(agentArgument);
+        final Document document = XmlUtil.loadDocument(agentArgument);
         final Map<String, Object> configs = parseConfigs(document);
 
         final MonkeyConfig parse = (MonkeyConfig) configs.values().iterator().next();
@@ -53,13 +50,6 @@ public final class Premain {
                         Premain::parseConfig));
     }
 
-    static Document loadDocument(final String filename) throws ParserConfigurationException, SAXException, IOException {
-        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setIgnoringElementContentWhitespace(true);
-
-        final DocumentBuilder builder = factory.newDocumentBuilder();
-        return builder.parse(new File(filename));
-    }
 
     @SuppressWarnings("unchecked")
     private static <T, C extends ConfigParser<T>> T parseConfig(final Element element) {
