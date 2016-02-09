@@ -9,7 +9,6 @@ import javassist.CtClass;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.lang.instrument.ClassFileTransformer;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +17,14 @@ import java.util.List;
  * @author Alexandru-Constantin Bledea
  * @since January 02, 2016
  */
-final class Patcher implements ClassFileTransformer {
+final class SimpleMethodBodyReplacer extends AbstractMonkeyPatcher {
 
     private final MonkeyConfig config;
 
     /**
      * @param config
      */
-    public Patcher(final MonkeyConfig config) {
+    public SimpleMethodBodyReplacer(final MonkeyConfig config) {
         this.config = config;
     }
 
@@ -54,6 +53,7 @@ final class Patcher implements ClassFileTransformer {
             for (final CtBehavior ctMethod : ctClass.getDeclaredBehaviors()) {
                 final MethodToPatch methodToPatch = clazz.methods.get(ctMethod.getLongName());
                 if (null != methodToPatch) {
+                    System.out.println("Patching " + ctMethod.getLongName());
                     ctMethod.setBody(String.format("{%s}", methodToPatch.body));
                 }
             }

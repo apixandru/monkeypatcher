@@ -28,7 +28,7 @@ import static javax.xml.xpath.XPathConstants.NODESET;
 final class MonkeyConfig {
 
     private static final String LOGGING_PATTERN = "/agent-config/properties/logging.pattern";
-    private static final String CLASSES_PATTERN = "/agent-config/classes/class";
+    private static final String CLASSES_PATTERN = "/agent-config/transformer/classes/class";
 
     final String loggingPattern;
     final Map<String, ClassToPatch> classes;
