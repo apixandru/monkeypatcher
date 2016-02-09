@@ -1,6 +1,7 @@
 package com.github.apixandru.utils;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -58,6 +59,10 @@ public final class XmlUtil {
         } catch (XPathExpressionException e) {
             throw new IllegalArgumentException("XPath failure", e);
         }
+    }
+
+    public static String getAttribute(Node element, String attribute) {
+        return ((Element) element).getAttribute(attribute);
     }
 
     public static Document loadDocument(final String filename) throws ParserConfigurationException, SAXException, IOException {

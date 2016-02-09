@@ -50,17 +50,12 @@ public class SimpleMethodBodyReplacerConfigParser implements ConfigParser<Monkey
                 .collect(Collectors.toList());
 
         final Map<String, MethodToPatch> methods = XmlUtil.stream(item, "methods/method")
-                .map(SimpleMethodBodyReplacerConfigParser::parseMethod)
+                .map(node -> new MethodToPatch(XmlUtil.getAttribute(node, "longname"), XmlUtil.evaluate(node, "body")))
                 .collect(Collectors.toMap(
                         MethodToPatch::getLongName,
                         Function.identity()));
 
         return new ClassToPatch(name, methods, stubs);
-    }
-
-    private static MethodToPatch parseMethod(final Node item) {
-        String name = item.getAttributes().getNamedItem("longname").getTextContent();
-        return new MethodToPatch(name, XmlUtil.evaluate(item, "body"));
     }
 
 }
