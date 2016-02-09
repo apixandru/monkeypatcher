@@ -1,8 +1,10 @@
 package com.github.apixandru.utils.monkeypatcher;
 
+import com.github.apixandru.utils.XmlUtil;
 import com.github.apixandru.utils.monkeypatcher.reimpl.ClassToPatch;
 import com.github.apixandru.utils.monkeypatcher.reimpl.MethodToPatch;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -20,6 +22,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static javax.xml.xpath.XPathConstants.NODESET;
 
@@ -96,4 +99,20 @@ final class MonkeyConfig {
         return new MethodToPatch(name, xpath.evaluate("body", item));
     }
 
+    private static Map<String, Object> parseConfigs(final NodeList configParserNodes) {
+        return XmlUtil.streamNodes(configParserNodes)
+                .map(Element.class::cast)
+                .collect(Collectors.toMap(
+                        e -> e.getAttribute("id"),
+                        MonkeyConfig::parseConfig));
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T, C extends ConfigParser<T>> T parseConfig(final Element element) {
+        try {
+            return ((C) Class.forName(element.getAttribute("class")).newInstance()).parse(element);
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | XPathExpressionException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
 }
