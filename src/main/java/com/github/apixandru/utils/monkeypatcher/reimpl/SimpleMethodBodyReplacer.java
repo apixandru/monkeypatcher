@@ -1,7 +1,7 @@
-package com.github.apixandru.utils.monkeypatcher;
+package com.github.apixandru.utils.monkeypatcher.reimpl;
 
-import com.github.apixandru.utils.monkeypatcher.reimpl.ClassToPatch;
-import com.github.apixandru.utils.monkeypatcher.reimpl.MethodToPatch;
+import com.github.apixandru.utils.monkeypatcher.AbstractMonkeyPatcher;
+import com.github.apixandru.utils.monkeypatcher.MonkeyConfig;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtBehavior;
@@ -17,7 +17,7 @@ import java.util.List;
  * @author Alexandru-Constantin Bledea
  * @since January 02, 2016
  */
-final class SimpleMethodBodyReplacer extends AbstractMonkeyPatcher<MonkeyConfig> {
+public final class SimpleMethodBodyReplacer extends AbstractMonkeyPatcher<MonkeyConfig> {
 
     /**
      * @param config

@@ -25,13 +25,13 @@ import static javax.xml.xpath.XPathConstants.NODESET;
  * @author Alexandru-Constantin Bledea
  * @since January 02, 2016
  */
-final class MonkeyConfig {
+public final class MonkeyConfig {
 
     private static final String XPATH_CONFIGS = "/agent-config/transformer-configs/transformer-config";
 
-    final Map<String, ClassToPatch> classes;
+    public final Map<String, ClassToPatch> classes;
 
-    MonkeyConfig(final Map<String, ClassToPatch> classes) {
+    public MonkeyConfig(final Map<String, ClassToPatch> classes) {
         this.classes = Collections.unmodifiableMap(classes);
     }
 

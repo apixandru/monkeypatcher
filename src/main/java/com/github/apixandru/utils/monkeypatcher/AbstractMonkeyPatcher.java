@@ -6,11 +6,11 @@ import java.lang.instrument.ClassFileTransformer;
  * @author Alexandru-Constantin Bledea
  * @since February 09, 2016
  */
-abstract class AbstractMonkeyPatcher<C> implements ClassFileTransformer {
+public abstract class AbstractMonkeyPatcher<C> implements ClassFileTransformer {
 
     protected final C config;
 
-    AbstractMonkeyPatcher(final C config) {
+    public AbstractMonkeyPatcher(final C config) {
         this.config = config;
     }
 
