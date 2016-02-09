@@ -1,5 +1,6 @@
 package com.github.apixandru.utils.monkeypatcher;
 
+import com.github.apixandru.utils.monkeypatcher.reimpl.MonkeyConfig;
 import com.github.apixandru.utils.monkeypatcher.reimpl.SimpleMethodBodyReplacer;
 
 import java.lang.instrument.Instrumentation;

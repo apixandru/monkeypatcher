@@ -1,7 +1,7 @@
-package com.github.apixandru.utils.monkeypatcher;
+package com.github.apixandru.utils.monkeypatcher.reimpl;
 
 import com.github.apixandru.utils.XmlUtil;
-import com.github.apixandru.utils.monkeypatcher.reimpl.ClassToPatch;
+import com.github.apixandru.utils.monkeypatcher.ConfigParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -39,7 +39,7 @@ public final class MonkeyConfig {
      * @param filename
      * @return
      */
-    static MonkeyConfig parse(String filename) {
+    public static MonkeyConfig parse(String filename) {
         try {
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setIgnoringElementContentWhitespace(true);

@@ -1,7 +1,6 @@
 package com.github.apixandru.utils.monkeypatcher.reimpl;
 
 import com.github.apixandru.utils.monkeypatcher.ConfigParser;
-import com.github.apixandru.utils.monkeypatcher.MonkeyConfig;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
