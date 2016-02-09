@@ -9,7 +9,6 @@ import org.w3c.dom.NodeList;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,22 +49,22 @@ public class SimpleMethodBodyReplacerConfigParser implements ConfigParser<Monkey
                 .collect(Collectors.toList());
         ;
         return new ClassToPatch(name,
-                parseMethods((NodeList) xpath.evaluate("methods/method", item, NODESET), xpath),
+                parseMethods((NodeList) xpath.evaluate("methods/method", item, NODESET)),
                 stubs);
     }
 
-    private static Map<String, MethodToPatch> parseMethods(final NodeList methods, final XPath xpath) throws XPathExpressionException {
+    private static Map<String, MethodToPatch> parseMethods(final NodeList methods) throws XPathExpressionException {
         Map<String, MethodToPatch> map = new HashMap<>();
         for (int i = 0; i < methods.getLength(); i++) {
-            final MethodToPatch parse = parseMethod(methods.item(i), xpath);
+            final MethodToPatch parse = parseMethod(methods.item(i));
             map.put(parse.longName, parse);
         }
         return map;
     }
 
-    private static MethodToPatch parseMethod(final Node item, final XPath xpath) throws XPathExpressionException {
+    private static MethodToPatch parseMethod(final Node item) {
         String name = item.getAttributes().getNamedItem("longname").getTextContent();
-        return new MethodToPatch(name, xpath.evaluate("body", item));
+        return new MethodToPatch(name, XmlUtil.evaluate(item, "body"));
     }
 
 }

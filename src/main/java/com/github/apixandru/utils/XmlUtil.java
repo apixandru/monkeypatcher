@@ -52,6 +52,14 @@ public final class XmlUtil {
         }
     }
 
+    public static String evaluate(final Node element, final String xPath) {
+        try {
+            return XPATH.evaluate(xPath, element);
+        } catch (XPathExpressionException e) {
+            throw new IllegalArgumentException("XPath failure", e);
+        }
+    }
+
     public static Document loadDocument(final String filename) throws ParserConfigurationException, SAXException, IOException {
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setIgnoringElementContentWhitespace(true);
