@@ -29,14 +29,11 @@ import static javax.xml.xpath.XPathConstants.NODESET;
  */
 final class MonkeyConfig {
 
-    private static final String LOGGING_PATTERN = "/agent-config/properties/logging.pattern";
     private static final String CLASSES_PATTERN = "/agent-config/transformer/classes/class";
 
-    final String loggingPattern;
     final Map<String, ClassToPatch> classes;
 
-    MonkeyConfig(final String loggingPattern, final Map<String, ClassToPatch> classes) {
-        this.loggingPattern = loggingPattern;
+    MonkeyConfig(final Map<String, ClassToPatch> classes) {
         this.classes = Collections.unmodifiableMap(classes);
     }
 
@@ -53,10 +50,9 @@ final class MonkeyConfig {
             final Document doc = builder.parse(new File(filename));
 
             final XPath xpath = XPathFactory.newInstance().newXPath();
-            final String loggingPattern = xpath.evaluate(LOGGING_PATTERN, doc);
 
             final NodeList classes = (NodeList) xpath.evaluate(CLASSES_PATTERN, doc, NODESET);
-            return new MonkeyConfig(loggingPattern, parseClasses(classes, xpath));
+            return new MonkeyConfig(parseClasses(classes, xpath));
         } catch (ParserConfigurationException | IOException | SAXException | XPathExpressionException e) {
             throw new IllegalStateException("Bad agent configuration", e);
         }
