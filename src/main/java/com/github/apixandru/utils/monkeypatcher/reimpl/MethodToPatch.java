@@ -14,4 +14,8 @@ public class MethodToPatch {
         this.body = body;
     }
 
+    public String getLongName() {
+        return longName;
+    }
+
 }

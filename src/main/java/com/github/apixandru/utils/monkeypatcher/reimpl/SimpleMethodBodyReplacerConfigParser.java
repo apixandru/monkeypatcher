@@ -12,6 +12,7 @@ import javax.xml.xpath.XPathFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static javax.xml.xpath.XPathConstants.NODESET;
@@ -34,32 +35,27 @@ public class SimpleMethodBodyReplacerConfigParser implements ConfigParser<Monkey
     private static Map<String, ClassToPatch> parseClasses(final NodeList classes, final XPath xpath) throws XPathExpressionException {
         Map<String, ClassToPatch> map = new HashMap<>();
         for (int i = 0; i < classes.getLength(); i++) {
-            final ClassToPatch parse = parse(classes.item(i), xpath);
+            final ClassToPatch parse = parse(classes.item(i));
             map.put(parse.name.replace('.', '/'), parse);
         }
         return map;
     }
 
 
-    private static ClassToPatch parse(final Node item, final XPath xpath) throws XPathExpressionException {
+    private static ClassToPatch parse(final Node item) {
         final String name = item.getAttributes().getNamedItem("name").getTextContent();
 
         final List<String> stubs = XmlUtil.stream(item, "class-pool/stub")
                 .map(Node::getTextContent)
                 .collect(Collectors.toList());
-        ;
-        return new ClassToPatch(name,
-                parseMethods((NodeList) xpath.evaluate("methods/method", item, NODESET)),
-                stubs);
-    }
 
-    private static Map<String, MethodToPatch> parseMethods(final NodeList methods) throws XPathExpressionException {
-        Map<String, MethodToPatch> map = new HashMap<>();
-        for (int i = 0; i < methods.getLength(); i++) {
-            final MethodToPatch parse = parseMethod(methods.item(i));
-            map.put(parse.longName, parse);
-        }
-        return map;
+        final Map<String, MethodToPatch> methods = XmlUtil.stream(item, "methods/method")
+                .map(SimpleMethodBodyReplacerConfigParser::parseMethod)
+                .collect(Collectors.toMap(
+                        MethodToPatch::getLongName,
+                        Function.identity()));
+
+        return new ClassToPatch(name, methods, stubs);
     }
 
     private static MethodToPatch parseMethod(final Node item) {
