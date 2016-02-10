@@ -16,12 +16,12 @@ import java.util.List;
  * @author Alexandru-Constantin Bledea
  * @since January 02, 2016
  */
-public final class SimpleMethodBodyReplacer extends AbstractMonkeyPatcher<MonkeyConfig> {
+public final class SimpleMethodBodyReplacer extends AbstractMonkeyPatcher<ReimplConfig> {
 
     /**
      * @param config
      */
-    public SimpleMethodBodyReplacer(final MonkeyConfig config) {
+    public SimpleMethodBodyReplacer(final ReimplConfig config) {
         super(config);
     }
 

@@ -13,20 +13,20 @@ import java.util.stream.Collectors;
  * @author Alexandru-Constantin Bledea
  * @since February 09, 2016
  */
-public class SimpleMethodBodyReplacerConfigParser implements ConfigParser<MonkeyConfig> {
+public class ReimplConfigParser implements ConfigParser<ReimplConfig> {
 
     private static final String XPATH_CLASSES = "classes/class";
 
     @Override
-    public MonkeyConfig parse(final Node node) {
+    public ReimplConfig parse(final Node node) {
 
         final Map<String, ClassToPatch> classMap = XmlUtil.stream(node, XPATH_CLASSES)
-                .map(SimpleMethodBodyReplacerConfigParser::parseClass)
+                .map(ReimplConfigParser::parseClass)
                 .collect(Collectors.toMap(
                         clasz -> clasz.name.replace('.', '/'),
                         Function.identity()));
         ;
-        return new MonkeyConfig(classMap);
+        return new ReimplConfig(classMap);
     }
 
     private static ClassToPatch parseClass(final Node item) {
