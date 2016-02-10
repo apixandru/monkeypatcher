@@ -8,9 +8,11 @@ import java.lang.instrument.ClassFileTransformer;
  */
 public abstract class AbstractMonkeyPatcher<C> implements ClassFileTransformer {
 
-    protected final C config;
+    public final C config;
+    protected final Log log;
 
-    public AbstractMonkeyPatcher(final C config) {
+    public AbstractMonkeyPatcher(final Log log, final C config) {
+        this.log = log;
         this.config = config;
     }
 

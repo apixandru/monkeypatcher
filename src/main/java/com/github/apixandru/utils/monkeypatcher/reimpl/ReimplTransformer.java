@@ -2,6 +2,7 @@ package com.github.apixandru.utils.monkeypatcher.reimpl;
 
 import com.github.apixandru.utils.monkeypatcher.AbstractMonkeyPatcher;
 import com.github.apixandru.utils.monkeypatcher.ConfiguredBy;
+import com.github.apixandru.utils.monkeypatcher.Log;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtBehavior;
@@ -21,10 +22,11 @@ import java.util.List;
 final class ReimplTransformer extends AbstractMonkeyPatcher<ReimplConfig> {
 
     /**
+     * @param log
      * @param config
      */
-    ReimplTransformer(final ReimplConfig config) {
-        super(config);
+    ReimplTransformer(final Log log, final ReimplConfig config) {
+        super(log, config);
     }
 
     @Override
@@ -52,14 +54,14 @@ final class ReimplTransformer extends AbstractMonkeyPatcher<ReimplConfig> {
             for (final CtBehavior ctMethod : ctClass.getDeclaredBehaviors()) {
                 final MethodToPatch methodToPatch = clazz.methods.get(ctMethod.getLongName());
                 if (null != methodToPatch) {
-                    System.out.println("Patching " + ctMethod.getLongName());
+                    log.info("Patching " + ctMethod.getLongName());
                     ctMethod.setBody(String.format("{%s}", methodToPatch.body));
                 }
             }
             return ctClass.toBytecode();
 
         } catch (final CannotCompileException | IOException e) {
-            e.printStackTrace();
+            log.error("Failed to patch class", e);
             return bytes;
         } finally {
             classes.forEach(CtClass::detach);
