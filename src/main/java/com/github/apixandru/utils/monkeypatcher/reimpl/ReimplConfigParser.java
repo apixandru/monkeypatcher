@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * @author Alexandru-Constantin Bledea
  * @since February 09, 2016
  */
-public class ReimplConfigParser implements ConfigParser<ReimplConfig> {
+class ReimplConfigParser implements ConfigParser<ReimplConfig> {
 
     private static final String XPATH_CLASSES = "classes/class";
 

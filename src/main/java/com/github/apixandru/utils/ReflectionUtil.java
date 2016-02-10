@@ -29,6 +29,9 @@ public final class ReflectionUtil {
 
     private static <T> T newInstance(final Constructor<T> constructor, final Object... parameters) {
         try {
+            if (!constructor.isAccessible()) {
+                constructor.setAccessible(true);
+            }
             return constructor.newInstance(parameters);
         } catch (final InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new IllegalArgumentException("Cannot instantiate " + constructor.getName(), e);
@@ -38,7 +41,7 @@ public final class ReflectionUtil {
     private static <T> Constructor<T> getConstructor(final Class<T> clasz, final Object... parameters) {
         final Class<?>[] classes = getClasses(parameters);
         try {
-            return clasz.getConstructor(classes);
+            return clasz.getDeclaredConstructor(classes);
         } catch (NoSuchMethodException e) {
             throw new IllegalArgumentException("No constructor in class with parameters " + Arrays.toString(classes));
         }

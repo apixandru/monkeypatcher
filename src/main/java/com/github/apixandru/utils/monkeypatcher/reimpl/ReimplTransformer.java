@@ -18,12 +18,12 @@ import java.util.List;
  * @since January 02, 2016
  */
 @ConfiguredBy(ReimplConfigParser.class)
-public final class ReimplTransformer extends AbstractMonkeyPatcher<ReimplConfig> {
+final class ReimplTransformer extends AbstractMonkeyPatcher<ReimplConfig> {
 
     /**
      * @param config
      */
-    public ReimplTransformer(final ReimplConfig config) {
+    ReimplTransformer(final ReimplConfig config) {
         super(config);
     }
 
