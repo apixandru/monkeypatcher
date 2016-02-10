@@ -33,13 +33,13 @@ public final class Premain {
     }
 
     public static AbstractMonkeyPatcher parseTransformer(final Document doc, final Log log) {
-        return loadTransformer(XmlUtil.getNode(doc, "/agent-config/transformer"), log);
+        return loadTransformer(doc.getDocumentElement(), log);
     }
 
     @SuppressWarnings("unchecked")
     private static <T, C extends ConfigParser<T>, E extends AbstractMonkeyPatcher<C>> E loadTransformer(final Node node,
                                                                                                         final Log log) {
-        final Class<E> transformerClass = ReflectionUtil.<E>loadClass(XmlUtil.getAttribute(node, "class"));
+        final Class<E> transformerClass = ReflectionUtil.<E>loadClass(node.getNodeName());
 
         final Class<C> configParserClass = (Class<C>) transformerClass.getAnnotation(ConfiguredBy.class).value();
 
