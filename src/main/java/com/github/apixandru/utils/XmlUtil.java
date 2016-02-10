@@ -45,12 +45,24 @@ public final class XmlUtil {
     }
 
     public static Stream<Node> stream(final Node element, final String xPath) {
+        return streamNodes(getList(element, xPath));
+    }
+
+    private static NodeList getList(final Node element, final String xPath) {
         try {
-            final NodeList nodeList = (NodeList) XPATH.evaluate(xPath, element, XPathConstants.NODESET);
-            return streamNodes(nodeList);
+            return (NodeList) XPATH.evaluate(xPath, element, XPathConstants.NODESET);
         } catch (XPathExpressionException e) {
             throw new IllegalArgumentException("XPath failure", e);
         }
+    }
+
+    public static Node getNode(final Node element, final String xPath) {
+        final NodeList list = getList(element, xPath);
+        final int length = list.getLength();
+        if (1 != length) {
+            throw new IllegalArgumentException("Expected 1 node for " + xPath + ", found " + length);
+        }
+        return list.item(0);
     }
 
     public static String evaluate(final Node element, final String xPath) {
