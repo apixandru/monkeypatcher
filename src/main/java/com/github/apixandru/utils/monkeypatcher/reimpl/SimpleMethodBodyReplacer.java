@@ -1,6 +1,7 @@
 package com.github.apixandru.utils.monkeypatcher.reimpl;
 
 import com.github.apixandru.utils.monkeypatcher.AbstractMonkeyPatcher;
+import com.github.apixandru.utils.monkeypatcher.ConfiguredBy;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtBehavior;
@@ -16,6 +17,7 @@ import java.util.List;
  * @author Alexandru-Constantin Bledea
  * @since January 02, 2016
  */
+@ConfiguredBy(ReimplConfigParser.class)
 public final class SimpleMethodBodyReplacer extends AbstractMonkeyPatcher<ReimplConfig> {
 
     /**
