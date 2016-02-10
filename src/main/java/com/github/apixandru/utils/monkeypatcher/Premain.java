@@ -3,7 +3,7 @@ package com.github.apixandru.utils.monkeypatcher;
 import com.github.apixandru.utils.ReflectionUtil;
 import com.github.apixandru.utils.XmlUtil;
 import com.github.apixandru.utils.monkeypatcher.reimpl.ReimplConfig;
-import com.github.apixandru.utils.monkeypatcher.reimpl.SimpleMethodBodyReplacer;
+import com.github.apixandru.utils.monkeypatcher.reimpl.ReimplTransformer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
@@ -34,7 +34,7 @@ public final class Premain {
         final Map<String, Object> configs = parseConfigs(document);
 
         final ReimplConfig parse = (ReimplConfig) configs.values().iterator().next();
-        instrumentation.addTransformer(new SimpleMethodBodyReplacer(parse));
+        instrumentation.addTransformer(new ReimplTransformer(parse));
     }
 
     /**
