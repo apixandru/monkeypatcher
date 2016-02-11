@@ -15,12 +15,10 @@ import java.util.stream.Collectors;
  */
 class ReimplConfigParser implements ConfigParser<ReimplConfig> {
 
-    private static final String XPATH_CLASSES = "classes/class";
-
     @Override
     public ReimplConfig parse(final Node node) {
 
-        final Map<String, ClassToPatch> classMap = XmlUtil.stream(node, XPATH_CLASSES)
+        final Map<String, ClassToPatch> classMap = XmlUtil.stream(node, "classes/class")
                 .map(ReimplConfigParser::parseClass)
                 .collect(Collectors.toMap(
                         clasz -> clasz.name.replace('.', '/'),
