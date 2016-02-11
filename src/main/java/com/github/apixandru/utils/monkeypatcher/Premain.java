@@ -24,27 +24,26 @@ public final class Premain {
             System.exit(1);
         }
 
-        final Log log = new Log(agentArgument.replace(".xml", "." + System.currentTimeMillis()));
+        Log.setFile(agentArgument.replace(".xml", "." + System.currentTimeMillis()));
 
         final Document document = XmlUtil.loadDocument(agentArgument);
 
-        final AbstractMonkeyPatcher parse = parseTransformer(document, log);
+        final AbstractMonkeyPatcher parse = parseTransformer(document);
         instrumentation.addTransformer(parse);
     }
 
-    public static AbstractMonkeyPatcher parseTransformer(final Document doc, final Log log) {
-        return loadTransformer(doc.getDocumentElement(), log);
+    public static AbstractMonkeyPatcher parseTransformer(final Document doc) {
+        return loadTransformer(doc.getDocumentElement());
     }
 
     @SuppressWarnings("unchecked")
-    private static <T, C extends ConfigParser<T>, E extends AbstractMonkeyPatcher<C>> E loadTransformer(final Node node,
-                                                                                                        final Log log) {
+    private static <T, C extends ConfigParser<T>, E extends AbstractMonkeyPatcher<C>> E loadTransformer(final Node node) {
         final Class<E> transformerClass = ReflectionUtil.<E>loadClass(node.getNodeName());
 
         final Class<C> configParserClass = (Class<C>) transformerClass.getAnnotation(ConfiguredBy.class).value();
 
         final T config = ReflectionUtil.newInstance(configParserClass).parse(node);
-        return ReflectionUtil.newInstance(transformerClass, log, config);
+        return ReflectionUtil.newInstance(transformerClass, config);
     }
 
 }

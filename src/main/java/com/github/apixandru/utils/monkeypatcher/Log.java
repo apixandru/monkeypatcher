@@ -9,19 +9,22 @@ import java.io.StringWriter;
  * @author Alexandru-Constantin Bledea
  * @since February 10, 2016
  */
-public final class Log implements AutoCloseable {
+public final class Log {
 
-    private final FileWriter writer;
+    private static FileWriter writer;
 
-    public Log(final String file) throws IOException {
-        this.writer = new FileWriter(file);
+    public static synchronized void setFile(final String file) throws IOException {
+        if (null != writer) {
+            writer.close();
+            writer = new FileWriter(file);
+        }
     }
 
-    public void info(final String info) {
+    public static void info(final String info) {
         writeString("INFO: " + info + "\n");
     }
 
-    public void error(final String message, final Exception exception) {
+    public static void error(final String message, final Exception exception) {
         try (final StringWriter out = new StringWriter();
              final PrintWriter pw = new PrintWriter(out)) {
             pw.write("ERROR: " + message + "\n");
@@ -33,19 +36,16 @@ public final class Log implements AutoCloseable {
         }
     }
 
-    private synchronized void writeString(String string) {
+    private static synchronized void writeString(String string) {
         try {
             System.out.print(string);
-            this.writer.write(string);
-            this.writer.flush();
+            if (null != writer) {
+                writer.write(string);
+                writer.flush();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void close() throws Exception {
-        this.writer.close();
     }
 
 }

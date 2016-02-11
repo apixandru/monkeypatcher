@@ -22,11 +22,10 @@ import java.util.List;
 final class ReimplTransformer extends AbstractMonkeyPatcher<ReimplConfig> {
 
     /**
-     * @param log
      * @param config
      */
-    ReimplTransformer(final Log log, final ReimplConfig config) {
-        super(log, config);
+    ReimplTransformer(final ReimplConfig config) {
+        super(config);
     }
 
     @Override
@@ -54,14 +53,14 @@ final class ReimplTransformer extends AbstractMonkeyPatcher<ReimplConfig> {
             for (final CtBehavior ctMethod : ctClass.getDeclaredBehaviors()) {
                 final MethodToPatch methodToPatch = clazz.methods.get(ctMethod.getLongName());
                 if (null != methodToPatch) {
-                    log.info("Patching " + ctMethod.getLongName());
+                    Log.info("Patching " + ctMethod.getLongName());
                     ctMethod.setBody(String.format("{%s}", methodToPatch.body));
                 }
             }
             return ctClass.toBytecode();
 
         } catch (final CannotCompileException | IOException e) {
-            log.error("Failed to patch class", e);
+            Log.error("Failed to patch class", e);
             return bytes;
         } finally {
             classes.forEach(CtClass::detach);
