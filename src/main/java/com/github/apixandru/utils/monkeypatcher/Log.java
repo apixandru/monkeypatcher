@@ -21,8 +21,8 @@ public final class Log {
     public static synchronized void setFile(final String file) throws IOException {
         if (null != writer) {
             writer.close();
-            writer = new FileWriter(file);
         }
+        writer = new FileWriter(file);
     }
 
     public static void info(final String info) {
