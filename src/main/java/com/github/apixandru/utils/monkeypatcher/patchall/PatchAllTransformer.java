@@ -3,9 +3,12 @@ package com.github.apixandru.utils.monkeypatcher.patchall;
 import com.github.apixandru.utils.monkeypatcher.AbstractMonkeyPatcher;
 import com.github.apixandru.utils.monkeypatcher.ConfiguredBy;
 import com.github.apixandru.utils.monkeypatcher.Log;
+import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtBehavior;
 import javassist.CtClass;
+import javassist.NotFoundException;
+import org.slf4j.instrumentation.JavassistHelper;
 
 import java.io.ByteArrayInputStream;
 import java.security.ProtectionDomain;
@@ -70,8 +73,14 @@ class PatchAllTransformer extends AbstractMonkeyPatcher<PatchAllConfig> {
         return bytes;
     }
 
-    private void patch(final CtBehavior behavior) {
+    private void patch(final CtBehavior behavior) throws NotFoundException, CannotCompileException {
 
+        final String className = behavior.getDeclaringClass().getName();
+        final String signature = JavassistHelper.getSignature(behavior);
+        final String returnValue = JavassistHelper.returnValue(behavior);
+
+        behavior.insertBefore(Log.class.getName() + ".info(\">> " + className + " " + signature + "\");");
+        behavior.insertAfter(Log.class.getName() + ".info(\"<< " + className + " " + signature + returnValue + "\");");
     }
 
 }
