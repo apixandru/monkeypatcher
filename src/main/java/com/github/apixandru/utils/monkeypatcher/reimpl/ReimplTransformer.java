@@ -59,6 +59,9 @@ final class ReimplTransformer extends AbstractMonkeyPatcher<ReimplConfig> {
                     if (!StringUtil.isEmpty(methodToPatch.before)) {
                         ctMethod.insertBefore(methodToPatch.before);
                     }
+                    if (!StringUtil.isEmpty(methodToPatch.after)) {
+                        ctMethod.insertAfter(methodToPatch.after);
+                    }
                 }
             }
             return ctClass.toBytecode();
