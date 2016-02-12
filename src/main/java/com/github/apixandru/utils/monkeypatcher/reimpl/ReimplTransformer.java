@@ -1,5 +1,6 @@
 package com.github.apixandru.utils.monkeypatcher.reimpl;
 
+import com.github.apixandru.utils.StringUtil;
 import com.github.apixandru.utils.monkeypatcher.AbstractMonkeyPatcher;
 import com.github.apixandru.utils.monkeypatcher.ConfiguredBy;
 import com.github.apixandru.utils.monkeypatcher.Log;
@@ -55,6 +56,9 @@ final class ReimplTransformer extends AbstractMonkeyPatcher<ReimplConfig> {
                 if (null != methodToPatch) {
                     Log.info("Patching " + ctMethod.getLongName());
                     ctMethod.setBody(String.format("{%s}", methodToPatch.body));
+                    if (!StringUtil.isEmpty(methodToPatch.before)) {
+                        ctMethod.insertBefore(methodToPatch.before);
+                    }
                 }
             }
             return ctClass.toBytecode();

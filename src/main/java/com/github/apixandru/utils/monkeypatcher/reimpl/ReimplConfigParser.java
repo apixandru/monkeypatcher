@@ -35,7 +35,10 @@ class ReimplConfigParser implements ConfigParser<ReimplConfig> {
                 .collect(Collectors.toList());
 
         final Map<String, MethodToPatch> methods = XmlUtil.stream(item, "methods/method")
-                .map(node -> new MethodToPatch(XmlUtil.getAttribute(node, "longname"), XmlUtil.evaluate(node, "body")))
+                .map(node -> new MethodToPatch(
+                        XmlUtil.getAttribute(node, "longname"),
+                        XmlUtil.evaluate(node, "insert-before"),
+                        XmlUtil.evaluate(node, "body")))
                 .collect(Collectors.toMap(
                         MethodToPatch::getLongName,
                         Function.identity()));

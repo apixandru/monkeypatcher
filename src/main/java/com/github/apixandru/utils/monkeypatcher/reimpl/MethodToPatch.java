@@ -8,10 +8,12 @@ class MethodToPatch {
 
     final String longName;
     final String body;
+    final String before;
 
-    MethodToPatch(final String longName, final String body) {
+    MethodToPatch(final String longName, final String before, final String body) {
         this.longName = longName;
         this.body = body;
+        this.before = before;
     }
 
     String getLongName() {
