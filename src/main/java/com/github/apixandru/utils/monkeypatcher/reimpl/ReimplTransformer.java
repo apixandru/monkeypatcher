@@ -55,7 +55,9 @@ final class ReimplTransformer extends AbstractMonkeyPatcher<ReimplConfig> {
                 final MethodToPatch methodToPatch = clazz.methods.get(ctMethod.getLongName());
                 if (null != methodToPatch) {
                     Log.info("Patching " + ctMethod.getLongName());
-                    ctMethod.setBody(String.format("{%s}", methodToPatch.body));
+                    if (!StringUtil.isEmpty(methodToPatch.body)) {
+                        ctMethod.setBody(methodToPatch.body);
+                    }
                     if (!StringUtil.isEmpty(methodToPatch.before)) {
                         ctMethod.insertBefore(methodToPatch.before);
                     }
