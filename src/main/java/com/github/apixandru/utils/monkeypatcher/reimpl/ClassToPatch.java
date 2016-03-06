@@ -1,7 +1,6 @@
 package com.github.apixandru.utils.monkeypatcher.reimpl;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,12 +11,10 @@ class ClassToPatch {
 
     final String name;
     final Map<String, MethodToPatch> methods;
-    final List<String> stubs;
 
-    ClassToPatch(final String name, final Map<String, MethodToPatch> methods, final List<String> stubs) {
+    ClassToPatch(final String name, final Map<String, MethodToPatch> methods) {
         this.name = name;
         this.methods = Collections.unmodifiableMap(methods);
-        this.stubs = Collections.unmodifiableList(stubs);
     }
 
 }

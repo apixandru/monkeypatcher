@@ -15,6 +15,8 @@ import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.apixandru.utils.JavassistUtil.mockDependencies;
+
 /**
  * @author Alexandru-Constantin Bledea
  * @since January 02, 2016
@@ -44,14 +46,10 @@ final class ReimplTransformer extends AbstractMonkeyPatcher<ReimplConfig> {
         final ClassPool pool = ClassPool.getDefault();
         final List<CtClass> classes = new ArrayList<>();
         try {
-            final CtClass ctClass = pool.makeClass(new ByteArrayInputStream(bytes));
-            classes.add(ctClass);
-            final ClassPool classPool = ctClass.getClassPool();
-            for (String stub : clazz.stubs) {
-                classes.add(classPool.makeClass(stub));
-            }
-
-            for (final CtBehavior ctMethod : ctClass.getDeclaredBehaviors()) {
+            final CtClass clasz = pool.makeClass(new ByteArrayInputStream(bytes));
+            classes.add(clasz);
+            mockDependencies(clasz, pool, classes);
+            for (final CtBehavior ctMethod : clasz.getDeclaredBehaviors()) {
                 final MethodToPatch methodToPatch = clazz.methods.get(ctMethod.getLongName());
                 if (null != methodToPatch) {
                     Log.info("Patching " + ctMethod.getLongName());
@@ -66,7 +64,7 @@ final class ReimplTransformer extends AbstractMonkeyPatcher<ReimplConfig> {
                     }
                 }
             }
-            return ctClass.toBytecode();
+            return clasz.toBytecode();
 
         } catch (final CannotCompileException | IOException e) {
             Log.error("Failed to patch class", e);

@@ -13,8 +13,9 @@ import org.slf4j.instrumentation.JavassistHelper;
 import java.io.ByteArrayInputStream;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+
+import static com.github.apixandru.utils.JavassistUtil.mockDependencies;
 
 /**
  * @author Alexandru-Constantin Bledea
@@ -72,17 +73,6 @@ class PatchAllTransformer extends AbstractMonkeyPatcher<PatchAllConfig> {
         }
 
         return bytes;
-    }
-
-    @SuppressWarnings("unchecked")
-    private void mockDependencies(final CtClass clasz, final ClassPool classPool, final List<CtClass> classes) {
-        for (String dependency : (Collection<String>) clasz.getRefClasses()) {
-            try {
-                classPool.get(dependency);
-            } catch (javassist.NotFoundException e) {
-                classes.add(classPool.makeClass(dependency));
-            }
-        }
     }
 
     private void patch(final CtBehavior behavior) throws NotFoundException, CannotCompileException {
