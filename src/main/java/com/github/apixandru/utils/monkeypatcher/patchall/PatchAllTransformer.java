@@ -4,17 +4,16 @@ import com.github.apixandru.utils.monkeypatcher.AbstractMonkeyPatcher;
 import com.github.apixandru.utils.monkeypatcher.ConfiguredBy;
 import com.github.apixandru.utils.monkeypatcher.Log;
 import javassist.CannotCompileException;
-import javassist.ClassPool;
 import javassist.CtBehavior;
 import javassist.CtClass;
 import javassist.NotFoundException;
 import org.slf4j.instrumentation.JavassistHelper;
 
-import java.io.ByteArrayInputStream;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.apixandru.utils.JavassistUtil.makeClass;
 import static com.github.apixandru.utils.JavassistUtil.mockDependencies;
 
 /**
@@ -51,12 +50,11 @@ class PatchAllTransformer extends AbstractMonkeyPatcher<PatchAllConfig> {
     }
 
     private byte[] patch(final String name, final byte[] bytes) {
-        final ClassPool pool = ClassPool.getDefault();
         final List<CtClass> classes = new ArrayList<>();
         try {
-            final CtClass clasz = pool.makeClass(new ByteArrayInputStream(bytes));
+            final CtClass clasz = makeClass(bytes);
             classes.add(clasz);
-            mockDependencies(clasz, pool, classes);
+            mockDependencies(clasz, classes);
             if (!clasz.isInterface()) {
                 for (final CtBehavior behavior : clasz.getDeclaredBehaviors()) {
                     if (!behavior.isEmpty()) {

@@ -5,16 +5,15 @@ import com.github.apixandru.utils.monkeypatcher.AbstractMonkeyPatcher;
 import com.github.apixandru.utils.monkeypatcher.ConfiguredBy;
 import com.github.apixandru.utils.monkeypatcher.Log;
 import javassist.CannotCompileException;
-import javassist.ClassPool;
 import javassist.CtBehavior;
 import javassist.CtClass;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.apixandru.utils.JavassistUtil.makeClass;
 import static com.github.apixandru.utils.JavassistUtil.mockDependencies;
 
 /**
@@ -43,12 +42,11 @@ final class ReimplTransformer extends AbstractMonkeyPatcher<ReimplConfig> {
     }
 
     private byte[] patch(final ClassToPatch clazz, final byte[] bytes) {
-        final ClassPool pool = ClassPool.getDefault();
         final List<CtClass> classes = new ArrayList<>();
         try {
-            final CtClass clasz = pool.makeClass(new ByteArrayInputStream(bytes));
+            final CtClass clasz = makeClass(bytes);
             classes.add(clasz);
-            mockDependencies(clasz, pool, classes);
+            mockDependencies(clasz, classes);
             for (final CtBehavior ctMethod : clasz.getDeclaredBehaviors()) {
                 final MethodToPatch methodToPatch = clazz.methods.get(ctMethod.getLongName());
                 if (null != methodToPatch) {
