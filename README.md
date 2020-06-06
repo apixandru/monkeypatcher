@@ -2,23 +2,51 @@
 
 Modify the behaviour of applications without touching the jars. Just add the javaagent as a parameter when launching the java application.
 
-    java -javaagent:monkeypatcher-1.0-SNAPSHOT-fat.jar=agentconfig.xml -jar somejar.jar
+    java -javaagent:monkeypatcher-1.0-SNAPSHOT-fat.jar=agentconfig.yml -jar somejar.jar
 
-Sample agentconfig.xml
+Sample agentconfig.yml
 
-    <?xml version='1.0' encoding='UTF-8'?>
-    <com.github.apixandru.utils.monkeypatcher.reimpl.ReimplTransformer>
+    overrideSecurityManager: true
 
-    <classes>
-        <class name="com.github.apixandru.SampleClass">
-            <methods>
-                <method longname="com.github.apixandru.SampleClass.method1()">
-                    <insert-before>System.out.println("Entered method1");</insert-before>
-                    <body>System.out.println("Inside method1");</body>
-                    <insert-after>System.out.println("Exiting method1");</insert-after>
-                </method>
-            </methods>
-        </class>
-    </classes>
+    inspectClasses:
+      enabled: false
 
-    </com.github.apixandru.utils.monkeypatcher.reimpl.ReimplTransformer>
+      includeNameEquals:
+        - com.apixandru.xbox.XboxMarketplaceEntry
+        - com.apixandru.xbox.XboxMarketplace
+
+      includeNameStartsWith:
+        - org.slf4j
+
+    logExecutions:
+      enabled: true
+      includeAll: false
+      includeReturnValues: true
+      includeNameStartsWith:
+        - com.apixandru.xbox
+
+      excludeNameStartsWith:
+        - java
+        - javax
+        - sun
+        - jdk
+        - com.sun
+        - com.github.apixandru
+        - com.apixandru
+        - org.slf4j
+
+    alterExecutions:
+      overrides:
+        - className: com.apixandru.xbox.XboxMarketplace
+          methods:
+            - name: purchase(com.apixandru.xbox.XboxMarketplaceEntry)
+              before: |-
+                      if (!entry.isOnSale()) {
+                          throw new IllegalStateException("Wait for the sale!");
+                      }
+
+        - className: com.apixandru.xbox.XboxMarketplaceEntry
+          methods:
+            - name: isOnSale()
+              body: |-
+                    return false;
