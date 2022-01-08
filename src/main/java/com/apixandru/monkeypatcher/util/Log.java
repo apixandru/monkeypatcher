@@ -82,6 +82,7 @@ public final class Log {
     }
 
     public String logInfoAtRuntime(String info) {
-        return Log.class.getName() + ".info(\"" + tag + "\",\" " + info + "\");";
+        return "System.out.println(\"TAGGED: " + tag + " <->" + info + "\");";
+//        return Log.class.getName() + ".info(\"" + tag + "\",\" " + info + "\");";
     }
 }

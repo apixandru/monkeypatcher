@@ -12,6 +12,8 @@ public class MultipleClassesConfig extends Config {
     public Set<String> excludeNameStartsWith = new HashSet<>();
     public Set<String> includeNameEquals = new HashSet<>();
     public Set<String> includeNameStartsWith = new HashSet<>();
+    public Set<String> skipMethods = new HashSet<>();
+    public Set<String> onlyIncludeMethods = new HashSet<>();
 
     @Override
     public boolean isUseful() {

@@ -9,4 +9,16 @@ public class LogExecutionsConfig extends MultipleClassesConfig {
     public boolean includeParams;
     public boolean includeReturnValues;
 
+    @Override
+    public boolean shouldPatch(String className, String methodName) {
+        if (!onlyIncludeMethods.isEmpty()) {
+            return onlyIncludeMethods.contains(methodName);
+        }
+        if (skipMethods.contains(methodName)) {
+            return false;
+        }
+        System.out.println(methodName);
+        return super.shouldPatch(className, methodName);
+    }
+
 }

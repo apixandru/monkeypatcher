@@ -47,7 +47,7 @@ public abstract class AbstractPatcher<C extends Config> implements ClassFileTran
                 return patchMethods(ctClass, className, dependencies);
             }
         } catch (Exception e) {
-            log.error("Failed to patch " + className, e);
+            log.error("Failed to patch class " + className, e);
         } finally {
             dependencies.forEach(CtClass::detach);
         }
@@ -62,7 +62,12 @@ public abstract class AbstractPatcher<C extends Config> implements ClassFileTran
         for (final CtBehavior method : ctClass.getDeclaredBehaviors()) {
             String methodName = method.getLongName();
             if (!method.isEmpty() && config.shouldPatch(className, methodName)) {
-                doPatchMethod(method, methodName, className);
+                try {
+                    doPatchMethod(method, methodName, className);
+                } catch (Exception ex) {
+                    log.error("Failed to patch method " + methodName, ex);
+                    throw ex;
+                }
             }
         }
         return ctClass.toBytecode();
