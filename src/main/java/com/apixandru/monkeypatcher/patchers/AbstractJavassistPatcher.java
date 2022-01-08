@@ -15,12 +15,12 @@ import java.util.List;
 import static com.apixandru.monkeypatcher.util.JavassistUtil.makeClass;
 import static com.apixandru.monkeypatcher.util.JavassistUtil.mockDependencies;
 
-public abstract class AbstractPatcher<C extends Config> implements ClassFileTransformer {
+public abstract class AbstractJavassistPatcher<C extends Config> implements ClassFileTransformer {
 
     protected final Log log = Log.forClass(getClass());
     protected final C config;
 
-    public AbstractPatcher(C config) {
+    public AbstractJavassistPatcher(C config) {
         this.config = config;
     }
 

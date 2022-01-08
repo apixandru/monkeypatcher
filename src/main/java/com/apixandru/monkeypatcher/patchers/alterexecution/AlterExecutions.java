@@ -1,12 +1,12 @@
 package com.apixandru.monkeypatcher.patchers.alterexecution;
 
-import com.apixandru.monkeypatcher.patchers.AbstractPatcher;
+import com.apixandru.monkeypatcher.patchers.AbstractJavassistPatcher;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
 
 import static com.apixandru.monkeypatcher.util.Utils.containsText;
 
-public final class AlterExecutions extends AbstractPatcher<AlterExecutionsConfig> {
+public final class AlterExecutions extends AbstractJavassistPatcher<AlterExecutionsConfig> {
 
     public AlterExecutions(final AlterExecutionsConfig config) {
         super(config);

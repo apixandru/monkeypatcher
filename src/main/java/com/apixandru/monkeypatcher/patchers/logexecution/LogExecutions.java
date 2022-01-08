@@ -1,6 +1,6 @@
 package com.apixandru.monkeypatcher.patchers.logexecution;
 
-import com.apixandru.monkeypatcher.patchers.AbstractPatcher;
+import com.apixandru.monkeypatcher.patchers.AbstractJavassistPatcher;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
 import javassist.CtClass;
@@ -9,7 +9,7 @@ import javassist.NotFoundException;
 import static org.slf4j.instrumentation.JavassistHelper.getSignature;
 import static org.slf4j.instrumentation.JavassistHelper.returnValue;
 
-public class LogExecutions extends AbstractPatcher<LogExecutionsConfig> {
+public class LogExecutions extends AbstractJavassistPatcher<LogExecutionsConfig> {
 
     public LogExecutions(LogExecutionsConfig config) {
         super(config);

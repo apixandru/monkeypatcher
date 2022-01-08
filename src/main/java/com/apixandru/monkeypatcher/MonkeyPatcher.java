@@ -1,14 +1,15 @@
 package com.apixandru.monkeypatcher;
 
-import com.apixandru.monkeypatcher.patchers.AbstractPatcher;
 import com.apixandru.monkeypatcher.patchers.Config;
 import com.apixandru.monkeypatcher.patchers.MonkeyPatcherConfig;
 import com.apixandru.monkeypatcher.patchers.alterexecution.AlterExecutions;
 import com.apixandru.monkeypatcher.patchers.inspectclasses.InspectClasses;
 import com.apixandru.monkeypatcher.patchers.logexecution.LogExecutions;
+import com.apixandru.monkeypatcher.patchers.quickreturn.QuickReturn;
 import com.apixandru.monkeypatcher.util.Log;
 import com.apixandru.monkeypatcher.util.NoSystemExitSecurityManager;
 
+import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
 import java.util.function.Function;
 
@@ -29,12 +30,13 @@ public class MonkeyPatcher {
     }
 
     public void setup() {
-        initInspectClasses("InspectClasses", config.inspectClasses, InspectClasses::new);
-        initInspectClasses("AlterExecutions", config.alterExecutions, AlterExecutions::new);
-        initInspectClasses("LogExecutions", config.logExecutions, LogExecutions::new);
+        initInspectClasses(InspectClasses.class, config.inspectClasses, InspectClasses::new);
+        initInspectClasses(AlterExecutions.class, config.alterExecutions, AlterExecutions::new);
+        initInspectClasses(LogExecutions.class, config.logExecutions, LogExecutions::new);
+        initInspectClasses(QuickReturn.class, config.quickReturn, QuickReturn::new);
     }
 
-    private <C extends Config> void initInspectClasses(String what, C config, Function<C, AbstractPatcher<C>> initializer) {
+    private <C extends Config> void initInspectClasses(Class<?> what, C config, Function<C, ClassFileTransformer> initializer) {
         if (config == null || !config.isUseful()) {
             log.info(what + " not configured.");
             return;
