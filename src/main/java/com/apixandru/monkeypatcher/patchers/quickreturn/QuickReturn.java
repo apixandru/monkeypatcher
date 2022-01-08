@@ -14,7 +14,6 @@ public final class QuickReturn extends AbstractObjectWebPatcher<QuickReturnConfi
 
     @Override
     protected void doPatchMethod(MethodNode methodNode, String methodName, String className) {
-        log.info("Patching " + methodName);
         methodNode.instructions.insert(new InsnNode(RETURN));
     }
 

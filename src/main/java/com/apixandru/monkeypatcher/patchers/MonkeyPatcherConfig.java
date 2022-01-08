@@ -11,6 +11,7 @@ public final class MonkeyPatcherConfig {
 
     public boolean overrideSecurityManager;
     public boolean logToFile;
+    public boolean logActions;
 
     public MultipleClassesConfig inspectClasses;
     public LogExecutionsConfig logExecutions;

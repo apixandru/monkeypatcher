@@ -38,11 +38,15 @@ public class MonkeyPatcher {
 
     private <C extends Config> void initInspectClasses(Class<?> what, C config, Function<C, ClassFileTransformer> initializer) {
         if (config == null || !config.isUseful()) {
-            log.info(what + " not configured.");
+            if (this.config.logActions) {
+                log.info(what + " not configured.");
+            }
             return;
         }
         if (!config.enabled) {
-            log.info(what + " not enabled.");
+            if (this.config.logActions) {
+                log.info(what + " not enabled.");
+            }
             return;
         }
         instrumentation.addTransformer(initializer.apply(config));

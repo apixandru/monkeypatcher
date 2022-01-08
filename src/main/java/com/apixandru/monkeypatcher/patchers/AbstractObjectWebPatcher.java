@@ -23,7 +23,9 @@ public abstract class AbstractObjectWebPatcher<C extends Config> implements Clas
     @Override
     public final byte[] transform(ClassLoader loader, String className, Class clazz, ProtectionDomain domain, byte[] bytes) {
         if (config.shouldPatch(className)) {
-            log.info("Patching class " + className);
+            if (config.logActions) {
+                log.info("Patching class " + className);
+            }
             return patchClass(className, bytes);
         }
         return bytes;
@@ -49,7 +51,9 @@ public abstract class AbstractObjectWebPatcher<C extends Config> implements Clas
             String methodName = methodNode.name + methodNode.desc;
             if (config.shouldPatch(className, methodName)) {
                 try {
-                    log.info("Patching class " + methodName);
+                    if (config.logActions) {
+                        log.info("Patching class " + methodName);
+                    }
                     doPatchMethod(methodNode, methodName, className);
                 } catch (Exception ex) {
                     log.error("Failed to patch method " + methodName, ex);
